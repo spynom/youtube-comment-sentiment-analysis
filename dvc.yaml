@@ -33,17 +33,25 @@ stages:
     outs:
       - data/final/train.csv
       - data/final/test.csv
-      - models/transformer.pkl
+      - models/tfidf_vectorizer.pkl
 
   model_building:
     cmd: python3 src/model_building.py
     deps:
       - data/final/train.csv
       - data/final/test.csv
-      - models/transformer.pkl
+      - src/model_building.py
     params:
       - model_building.model_parameters
 
     outs:
-      - reports/evaluate_matrices.json
+      - models/final_model.pkl
+
+  model_evaluation:
+    cmd: python3 src/model_evaluation.py
+    deps:
+      - src/model_evaluation.py
+      - data/final/train.csv
+      - data/final/test.csv
+      - models/tfidf_vectorizer.pkl
       - models/final_model.pkl

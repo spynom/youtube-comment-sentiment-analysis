@@ -7,7 +7,7 @@ import requests
 
 
 
-if __name__ == "__main__":
+def main():
     logger = logging.getLogger("DataIngestion")
     logger.setLevel(logging.DEBUG)
 
@@ -46,7 +46,7 @@ if __name__ == "__main__":
             logger.info("Data saved")
 
         except FileNotFoundError as exc:
-            logger.error(f"file save_path {save_dir} not found")
+            logger.error(f"file save_path {file_path} not found")
             raise
         except Exception as exc:
             logger.error(exc)
@@ -55,3 +55,6 @@ if __name__ == "__main__":
     else:
         logger.error(f"Failed to fetch data due to URLError{request.status_code}")
         raise requests.exceptions.HTTPError
+
+if __name__ == "__main__":
+    main()

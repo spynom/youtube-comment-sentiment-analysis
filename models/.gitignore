@@ -1,2 +1,3 @@
 /transformer.pkl
 /final_model.pkl
+/tfidf_vectorizer.pkl
