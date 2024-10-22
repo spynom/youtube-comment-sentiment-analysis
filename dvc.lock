@@ -5,8 +5,13 @@ stages:
     deps:
     - path: src/data_ingestion.py
       hash: md5
-      md5: 88027408790de4a70f6f51ab0ddc0c38
-      size: 304
+      md5: d7546d5e906b07294dbe502133805d50
+      size: 1389
+    params:
+      params.yaml:
+        data_ingestion.save_dir: data/raw
+        data_ingestion.url: 
+          https://raw.githubusercontent.com/Himanshu-1703/reddit-sentiment-analysis/refs/heads/main/data/reddit.csv
     outs:
     - path: data/raw/reddit.csv
       hash: md5
@@ -21,24 +26,24 @@ stages:
       size: 6888931
     - path: src/data_cleaning.py
       hash: md5
-      md5: ac905b2d382f1761e20d7f82e3225127
-      size: 1609
+      md5: fe4fb55d28d271be84ef9a6b66b63cd8
+      size: 1752
     outs:
     - path: data/processed/cleaned.csv
       hash: md5
-      md5: 2e630461bfac93f2c6910e5e4bb85c27
-      size: 5091280
+      md5: d2cd181bfa12960bbf9e214aaec15406
+      size: 5083080
   feature_engineering:
     cmd: python3 src/feature_engineering.py
     deps:
     - path: data/processed/cleaned.csv
       hash: md5
-      md5: 2e630461bfac93f2c6910e5e4bb85c27
-      size: 5091280
+      md5: d2cd181bfa12960bbf9e214aaec15406
+      size: 5083080
     - path: src/feature_engineering.py
       hash: md5
-      md5: 85954eec51ee7cefb56e2eaeb8d53b9c
-      size: 1807
+      md5: fbfe77228ad8f4640b3a3e2cbb5b2ca4
+      size: 1803
     outs:
     - path: data/final/test.csv
       hash: md5

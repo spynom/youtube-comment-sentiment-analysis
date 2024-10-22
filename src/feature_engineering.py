@@ -15,7 +15,7 @@ def load_data()->[pd.DataFrame,pd.DataFrame,pd.DataFrame,pd.DataFrame]:
     df = read_file("data", "processed", "cleaned.csv").dropna(how="any").drop_duplicates()
 
     X = df.comment
-    y = df.category + 1
+    y = df.category
 
     return train_test_split(X, y, test_size=0.2, random_state=42, stratify=y)
 

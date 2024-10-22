@@ -40,11 +40,15 @@ def preprocess_comment(comment):
 
     return comment if comment.strip()  else np.nan
 
+def preprocess_category(category:pd.Series)->pd.Series:
+    return category+1
+
 if __name__ == '__main__':
     raw_data = read_file("data","raw","reddit.csv").dropna(how='any')
 
     raw_data=raw_data.assign(
-        comment=raw_data.comment.apply(preprocess_comment)
+        comment=raw_data.comment.apply(preprocess_comment),
+        category = raw_data.category.pipe(preprocess_category)
                             ).dropna(how='any').drop_duplicates()
 
     raw_data.to_csv(os.path.join("data", "processed", "cleaned.csv"), index=False)
