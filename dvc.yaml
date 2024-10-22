@@ -5,23 +5,31 @@ stages:
       - src/data_ingestion.py
     params:
       - data_ingestion.url
-      - data_ingestion.save_dir
     outs:
       - data/raw/reddit.csv
 
-  data_clean:
-    cmd: python3 src/data_cleaning.py
+  data_preprocessing:
+    cmd: python3 src/data_preprocessing.py
     deps:
-      - src/data_cleaning.py
+      - src/data_preprocessing.py
       - data/raw/reddit.csv
+    params:
+      - data_preprocessing.keep_stop_words
+      - data_preprocessing.test_size
+      - data_preprocessing.random_state
     outs:
-      - data/processed/cleaned.csv
+      - data/processed/train.csv
+      - data/processed/test.csv
 
   feature_engineering:
     cmd: python3 src/feature_engineering.py
     deps:
       - src/feature_engineering.py
-      - data/processed/cleaned.csv
+      - data/processed/train.csv
+      - data/processed/test.csv
+    params:
+      - feature_engineering.ngram_range
+      - feature_engineering.max_features
     outs:
       - data/final/train.csv
       - data/final/test.csv

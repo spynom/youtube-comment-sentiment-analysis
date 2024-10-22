@@ -5,11 +5,10 @@ stages:
     deps:
     - path: src/data_ingestion.py
       hash: md5
-      md5: d7546d5e906b07294dbe502133805d50
-      size: 1389
+      md5: 8e4c821158e0ed1f1454d9839b8edc5c
+      size: 1435
     params:
       params.yaml:
-        data_ingestion.save_dir: data/raw
         data_ingestion.url: 
           https://raw.githubusercontent.com/Himanshu-1703/reddit-sentiment-analysis/refs/heads/main/data/reddit.csv
     outs:
@@ -26,30 +25,73 @@ stages:
       size: 6888931
     - path: src/data_cleaning.py
       hash: md5
-      md5: fe4fb55d28d271be84ef9a6b66b63cd8
-      size: 1752
+      md5: 2091775d8a311f89c8ee6e287de6a27b
+      size: 3231
     outs:
-    - path: data/processed/cleaned.csv
+    - path: data/processed/test.csv
       hash: md5
-      md5: d2cd181bfa12960bbf9e214aaec15406
-      size: 5083080
+      md5: 3bc31e5498a80ef0f872342a767667f6
+      size: 1016929
+    - path: data/processed/train.csv
+      hash: md5
+      md5: c91b07a28cd27b480e70fca635e88799
+      size: 4066168
   feature_engineering:
     cmd: python3 src/feature_engineering.py
     deps:
-    - path: data/processed/cleaned.csv
+    - path: data/processed/test.csv
       hash: md5
-      md5: d2cd181bfa12960bbf9e214aaec15406
-      size: 5083080
+      md5: 3bc31e5498a80ef0f872342a767667f6
+      size: 1016929
+    - path: data/processed/train.csv
+      hash: md5
+      md5: c91b07a28cd27b480e70fca635e88799
+      size: 4066168
     - path: src/feature_engineering.py
       hash: md5
-      md5: fbfe77228ad8f4640b3a3e2cbb5b2ca4
-      size: 1803
+      md5: 7b8be7a365c33cef4706dec3f6030e0d
+      size: 2619
+    params:
+      params.yaml:
+        feature_engineering.max_features: 1000
+        feature_engineering.ngram_range:
+        - 1
+        - 3
     outs:
     - path: data/final/test.csv
       hash: md5
-      md5: ded1b40936b06e718dfd5c8f128c58ce
-      size: 30097077
+      md5: 9e4e3edc077a70cf277352f5d02af369
+      size: 30091447
     - path: data/final/train.csv
       hash: md5
-      md5: 0b3f303d7589f6ffa14468e76dfcd3c7
-      size: 120365886
+      md5: 38c15df26a370ebb0f62c3f03faf4757
+      size: 120358172
+  data_preprocessing:
+    cmd: python3 src/data_preprocessing.py
+    deps:
+    - path: data/raw/reddit.csv
+      hash: md5
+      md5: b73bead121d2dbfd7823b1d426695256
+      size: 6888931
+    - path: src/data_preprocessing.py
+      hash: md5
+      md5: 26bbf4fb8976cf4cac27c72ff6cb751d
+      size: 3316
+    params:
+      params.yaml:
+        data_preprocessing.keep_stop_words:
+        - not
+        - however
+        - although
+        - but
+        data_preprocessing.random_state: 42
+        data_preprocessing.test_size: 0.2
+    outs:
+    - path: data/processed/test.csv
+      hash: md5
+      md5: 3bc31e5498a80ef0f872342a767667f6
+      size: 1016929
+    - path: data/processed/train.csv
+      hash: md5
+      md5: c91b07a28cd27b480e70fca635e88799
+      size: 4066168
