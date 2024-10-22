@@ -1,8 +1,30 @@
 # youtube comment sentiment analysis
 
-<a target="_blank" href="https://cookiecutter-data-science.drivendata.org/">
-    <img src="https://img.shields.io/badge/CCDS-Project%20template-328F97?logo=cookiecutter" />
-</a>
+<svg xmlns="http://www.w3.org/2000/svg" width="200" height="40" role="img" aria-label="CCDS: Project template">
+    <title>CCDS: Project template</title>
+    <defs>
+        <linearGradient id="bgGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+            <stop offset="0%" stop-color="#2196F3"/>
+            <stop offset="100%" stop-color="#03A9F4"/>
+        </linearGradient>
+        <clipPath id="r">
+            <rect width="200" height="30" rx="5"/>
+        </clipPath>
+    </defs>
+    <g clip-path="url(#r)">
+        <rect width="200" height="40" fill="url(#bgGradient)"/>
+    </g>
+    <g fill="#fff" text-anchor="middle" font-family="Verdana,sans-serif" font-size="20">
+        <text x="20" y="21"> 🤗</text>
+        <text x="100" y="21">CCDS</text>
+
+    </g>
+</svg>
+
+
+
+
+
 
 this project on building a end-to-end a ml model building to model deployment to available to use for users.
 
