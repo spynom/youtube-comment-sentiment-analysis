@@ -33,3 +33,17 @@ stages:
     outs:
       - data/final/train.csv
       - data/final/test.csv
+      - models/transformer.pkl
+
+  model_building:
+    cmd: python3 src/model_building.py
+    deps:
+      - data/final/train.csv
+      - data/final/test.csv
+      - models/transformer.pkl
+    params:
+      - model_building.model_parameters
+
+    outs:
+      - reports/evaluate_matrices.json
+      - models/final_model.pkl

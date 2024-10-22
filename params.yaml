@@ -16,6 +16,16 @@ feature_engineering:
     - 3
   max_features: 1000
 
+model_building:
+  model_parameters:
+    n_estimators: 885
+    learning_rate: 0.086
+    max_depth: 4
+    num_leaves: 99
+    colsample_bytree: 0.82
+    subsample: 0.924
+    reg_alpha: 0.0003
+    reg_lambda: 0.493
 
 
 

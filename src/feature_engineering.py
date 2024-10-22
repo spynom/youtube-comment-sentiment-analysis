@@ -3,6 +3,7 @@ import pandas as pd
 from sklearn.feature_extraction.text import TfidfVectorizer
 from sklearn.model_selection import train_test_split
 import logging, yaml
+import pickle
 
 
 
@@ -24,7 +25,7 @@ def apply_feature_engineering(train_dataset, test_dataset,ngram_range:list,max_f
     y_train = y_train.to_frame().reset_index(drop=True)  # if y_train is a Series
     y_test = y_test.to_frame().reset_index(drop=True)  # if y_test is a Series
 
-    return x_train, x_test, y_train, y_test
+    return x_train, x_test, y_train, y_test , vectorizer
 
 
 
@@ -57,7 +58,7 @@ if __name__ == '__main__':
     test = pd.read_csv(test_file_path)
     logger.info("test data read successfully")
 
-    X_train, X_test, y_train, y_test =apply_feature_engineering(train, test,ngram_range=params["ngram_range"],max_features=params["max_features"])
+    X_train, X_test, y_train, y_test,transformer =apply_feature_engineering(train, test,ngram_range=params["ngram_range"],max_features=params["max_features"])
     logger.info("feature transformation applied")
 
     train_path = os.path.join("data", "final", "train.csv")
@@ -65,9 +66,14 @@ if __name__ == '__main__':
 
     pd.concat([X_train, y_train], axis=1).to_csv(train_path, index=False)
     logger.info("train data saved successfully")
+
     pd.concat([X_test, y_test], axis=1).to_csv(test_path, index=False)
     logger.info("test data saved successfully")
 
+
+    with open (os.path.join("models", "transformer.pkl"), "wb") as f:
+        pickle.dump(transformer, f)
+    logger.info("model saved successfully")
 
 
 

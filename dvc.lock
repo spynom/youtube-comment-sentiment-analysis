@@ -49,8 +49,8 @@ stages:
       size: 4066168
     - path: src/feature_engineering.py
       hash: md5
-      md5: 7b8be7a365c33cef4706dec3f6030e0d
-      size: 2619
+      md5: 8749de8946da6fb951b44099b2240bc6
+      size: 2810
     params:
       params.yaml:
         feature_engineering.max_features: 1000
@@ -66,6 +66,10 @@ stages:
       hash: md5
       md5: 38c15df26a370ebb0f62c3f03faf4757
       size: 120358172
+    - path: models/transformer.pkl
+      hash: md5
+      md5: 020f971f6928fee4c942e8c28327b72c
+      size: 36892
   data_preprocessing:
     cmd: python3 src/data_preprocessing.py
     deps:
@@ -95,3 +99,38 @@ stages:
       hash: md5
       md5: c91b07a28cd27b480e70fca635e88799
       size: 4066168
+  model_building:
+    cmd: python3 src/model_building.py
+    deps:
+    - path: data/final/test.csv
+      hash: md5
+      md5: 9e4e3edc077a70cf277352f5d02af369
+      size: 30091447
+    - path: data/final/train.csv
+      hash: md5
+      md5: 38c15df26a370ebb0f62c3f03faf4757
+      size: 120358172
+    - path: models/transformer.pkl
+      hash: md5
+      md5: 020f971f6928fee4c942e8c28327b72c
+      size: 36892
+    params:
+      params.yaml:
+        model_building.model_parameters:
+          n_estimators: 885
+          learning_rate: 0.086
+          max_depth: 4
+          num_leaves: 99
+          colsample_bytree: 0.82
+          subsample: 0.924
+          reg_alpha: 0.0003
+          reg_lambda: 0.493
+    outs:
+    - path: models/final_model.pkl
+      hash: md5
+      md5: 27a11e9203503d66dffd34934563d012
+      size: 2921585
+    - path: reports/evaluate_matrices.json
+      hash: md5
+      md5: 7f73d4a148c307d5669a44716402485d
+      size: 1328
