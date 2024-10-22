@@ -1,5 +1,6 @@
 # youtube comment sentiment analysis
 
+<div>
 <svg xmlns="http://www.w3.org/2000/svg" width="200" height="40" role="img" aria-label="CCDS: Project template">
     <title>CCDS: Project template</title>
     <defs>
@@ -17,9 +18,9 @@
     <g fill="#fff" text-anchor="middle" font-family="Verdana,sans-serif" font-size="20">
         <text x="20" y="21"> 🤗</text>
         <text x="100" y="21">CCDS</text>
-
     </g>
 </svg>
+</div>
 
 
 
