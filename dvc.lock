@@ -1,0 +1,50 @@
+schema: '2.0'
+stages:
+  data_ingestion:
+    cmd: python3 src/data_ingestion.py
+    deps:
+    - path: src/data_ingestion.py
+      hash: md5
+      md5: 88027408790de4a70f6f51ab0ddc0c38
+      size: 304
+    outs:
+    - path: data/raw/reddit.csv
+      hash: md5
+      md5: b73bead121d2dbfd7823b1d426695256
+      size: 6888931
+  data_clean:
+    cmd: python3 src/data_cleaning.py
+    deps:
+    - path: data/raw/reddit.csv
+      hash: md5
+      md5: b73bead121d2dbfd7823b1d426695256
+      size: 6888931
+    - path: src/data_cleaning.py
+      hash: md5
+      md5: ac905b2d382f1761e20d7f82e3225127
+      size: 1609
+    outs:
+    - path: data/processed/cleaned.csv
+      hash: md5
+      md5: 2e630461bfac93f2c6910e5e4bb85c27
+      size: 5091280
+  feature_engineering:
+    cmd: python3 src/feature_engineering.py
+    deps:
+    - path: data/processed/cleaned.csv
+      hash: md5
+      md5: 2e630461bfac93f2c6910e5e4bb85c27
+      size: 5091280
+    - path: src/feature_engineering.py
+      hash: md5
+      md5: 85954eec51ee7cefb56e2eaeb8d53b9c
+      size: 1807
+    outs:
+    - path: data/final/test.csv
+      hash: md5
+      md5: ded1b40936b06e718dfd5c8f128c58ce
+      size: 30097077
+    - path: data/final/train.csv
+      hash: md5
+      md5: 0b3f303d7589f6ffa14468e76dfcd3c7
+      size: 120365886

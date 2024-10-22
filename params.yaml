@@ -1,0 +1,4 @@
+data_ingestion:
+  url: https://raw.githubusercontent.com/Himanshu-1703/reddit-sentiment-analysis/refs/heads/main/data/reddit.csv
+
+
