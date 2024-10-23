@@ -19,13 +19,9 @@ jobs:
         env:
           DAGSHUB_TOKEN: ${{ secrets.DAGSHUB_TOKEN }}
         run: |
-          echo "DAGSHUB_TOKEN is set"
           pip install -r requirements.txt
           python3.10 -c "import nltk; nltk.download('stopwords')"
           python3.10 -c "import nltk; nltk.download('wordnet')"
-
-      - name: Print environment variables
-        run: env
 
       - name: run pipeline
         run: |
