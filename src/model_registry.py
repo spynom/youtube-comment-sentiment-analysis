@@ -1,5 +1,5 @@
 import os
-
+import dagshub
 import mlflow
 import json
 import logging
@@ -8,8 +8,14 @@ from dotenv import load_dotenv
 # Load environment variables from .env file
 load_dotenv()
 
-import dagshub
-dagshub.init(repo_owner='spynom', repo_name='youtube-comment-sentiment-analysis', mlflow=True)
+
+# Set up DagsHub credentials for MLflow tracking
+dagshub_token = os.getenv("DAGSHUB_TOKEN")
+if not dagshub_token:
+    raise EnvironmentError("DAGSHUB_PAT environment variable is not set")
+
+os.environ["MLFLOW_TRACKING_USERNAME"] = dagshub_token
+os.environ["MLFLOW_TRACKING_PASSWORD"] = dagshub_token
 
 # Set up logging for the model building process
 logger = logging.getLogger("Model evaluation")
@@ -49,6 +55,7 @@ def model_registry(model_info,model_name):
 
 
 def main():
+    mlflow.set_tracking_uri("https://dagshub.com/spynom/youtube-comment-sentiment-analysis.mlflow")
     model_info = load_run_info("mlflow_experiment_info.json")
     model_name = "youtube_sentimental_analysis_model"
     model_registry(model_info,model_name)

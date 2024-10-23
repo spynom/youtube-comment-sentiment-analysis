@@ -11,11 +11,20 @@ import seaborn as sns
 import mlflow
 from dotenv import load_dotenv
 from mlflow.models import infer_signature
+import dagshub
+
 # Load environment variables from .env file
 load_dotenv()
 
-import dagshub
-dagshub.init(repo_owner='spynom', repo_name='youtube-comment-sentiment-analysis', mlflow=True)
+# Set up DagsHub credentials for MLflow tracking
+dagshub_token = os.getenv("DAGSHUB_TOKEN")
+if not dagshub_token:
+    raise EnvironmentError("DAGSHUB_PAT environment variable is not set")
+
+os.environ["MLFLOW_TRACKING_USERNAME"] = dagshub_token
+os.environ["MLFLOW_TRACKING_PASSWORD"] = dagshub_token
+
+
 
 # Set up logging for the model building process
 logger = logging.getLogger("Model evaluation")
@@ -118,8 +127,8 @@ def save_run_info(run_id,artifact_path):
         ,f)
 
 def main():
-    #mlflow.set_tracking_uri(os.getenv('MLFLOW_TRACKING_URI'))
-    mlflow.set_experiment(os.getenv('MLFLOW_EXPERIMENT_NAME'))
+    mlflow.set_tracking_uri("https://dagshub.com/spynom/youtube-comment-sentiment-analysis.mlflow")
+    mlflow.set_experiment('youtube_sentiment_analysis_dvc_pipeline')
 
     with mlflow.start_run() as run:
 
