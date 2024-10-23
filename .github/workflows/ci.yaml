@@ -17,7 +17,7 @@ jobs:
 
       - name: install dependencies
         env:
-          DAGSHUB_TOKEN: ${{ secrets.DAGSHUB_TOKEN }}
+          DAGSHUB_TOKEN: ${{ secrets.DAGHUBS }}
         run: |
           pip install -r requirements.txt
           python3.10 -c "import nltk; nltk.download('stopwords')"
