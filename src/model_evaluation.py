@@ -141,7 +141,7 @@ def main():
         train_dataset = load_data(os.path.join('data', 'final','train.csv'))
         test_dataset = load_data(os.path.join('data', 'final','test.csv'))
 
-        model = load_model(os.path.join('models','final_model.pkl'))
+        model = load_model(os.path.join('models','model.pkl'))
 
 
 
