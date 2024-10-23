@@ -53,8 +53,8 @@ stages:
       - src/model_evaluation.py
       - data/final/train.csv
       - data/final/test.csv
-      - models/tfidf_vectorizer.pkl
-      - models/final_model.pkl
+      - models/transformer.pkl
+      - models/model.pkl
 
   model_registry:
     cmd: python3 src/model_registry.py
