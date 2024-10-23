@@ -18,6 +18,7 @@ jobs:
       - name: install dependencies
         run: |
           pip install -r requirements.txt
+          python3.10 -c "import nltk; nltk.download('stopwords')"
 
       - name: run pipeline
         run: |
