@@ -16,13 +16,13 @@ jobs:
           python-version: '3.10'
 
       - name: install dependencies
-        env:
-          DAGSHUB_TOKEN: ${{ secrets.DAGHUBS }}
         run: |
           pip install -r requirements.txt
           python3.10 -c "import nltk; nltk.download('stopwords')"
           python3.10 -c "import nltk; nltk.download('wordnet')"
 
       - name: run pipeline
+        env:
+          DAGSHUB_TOKEN: ${{ secrets.DAGSHUB_TOKEN }}
         run: |
           dvc repro
