@@ -55,3 +55,8 @@ stages:
       - data/final/test.csv
       - models/tfidf_vectorizer.pkl
       - models/final_model.pkl
+
+  model_registry:
+    cmd: python3 src/model_registry.py
+    deps:
+      - mlflow_experiment_info.json

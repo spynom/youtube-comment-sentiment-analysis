@@ -10,9 +10,12 @@ import matplotlib.pyplot as plt
 import seaborn as sns
 import mlflow
 from dotenv import load_dotenv
-
+from mlflow.models import infer_signature
 # Load environment variables from .env file
 load_dotenv()
+
+import dagshub
+dagshub.init(repo_owner='spynom', repo_name='youtube-comment-sentiment-analysis', mlflow=True)
 
 # Set up logging for the model building process
 logger = logging.getLogger("Model evaluation")
@@ -86,9 +89,8 @@ def evaluate_model(model, X, y,dataset_name):
 
         log_confusion_matrix(cm,dataset_name)
 
-
-
         logger.debug('Model evaluation completed %s',dataset_name)
+        return y_pred
 
     except Exception as e:
         logger.error('Error during model evaluation: %s', e)
@@ -116,7 +118,7 @@ def save_run_info(run_id,artifact_path):
         ,f)
 
 def main():
-    mlflow.set_tracking_uri(os.getenv('MLFLOW_TRACKING_URI'))
+    #mlflow.set_tracking_uri(os.getenv('MLFLOW_TRACKING_URI'))
     mlflow.set_experiment(os.getenv('MLFLOW_EXPERIMENT_NAME'))
 
     with mlflow.start_run() as run:
@@ -131,12 +133,16 @@ def main():
 
         model = load_model(os.path.join('models','final_model.pkl'))
 
-        # Log model and vectorizer
-        mlflow.sklearn.log_model(model, "model")
-        mlflow.log_artifact(os.path.join("models", 'transformer.pkl'))
+
 
         evaluate_model(model, train_dataset.iloc[:,:-1], train_dataset.iloc[:,-1], 'train')
-        evaluate_model(model, test_dataset.iloc[:,:-1], test_dataset.iloc[:,-1], 'test')
+        y_test_pred = evaluate_model(model, test_dataset.iloc[:,:-1], test_dataset.iloc[:,-1], 'test')
+
+        signature = infer_signature(test_dataset.iloc[:,:-1], y_test_pred)
+
+        # Log model and vectorizer
+        mlflow.sklearn.log_model(model, artifact_path="LGBMClassifier_model",signature=signature)
+        mlflow.log_artifact(os.path.join("models", 'transformer.pkl'))
         # Add important tags
         mlflow.set_tag("model_type", "LightGBM")
         mlflow.set_tag("transformer_type", "tfidf_vectorizer")

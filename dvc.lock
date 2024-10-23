@@ -151,5 +151,12 @@ stages:
       size: 36892
     - path: src/model_evaluation.py
       hash: md5
-      md5: 4733ba36388b84796df5d45994438d76
-      size: 4794
+      md5: 6b4a2e892e6bf1383366ef1818f243d2
+      size: 5108
+  model_registry:
+    cmd: python3 src/model_registry.py
+    deps:
+    - path: mlflow_experiment_info.json
+      hash: md5
+      md5: bebc994ea9416d27cbe4b2cef1ddad9d
+      size: 160
