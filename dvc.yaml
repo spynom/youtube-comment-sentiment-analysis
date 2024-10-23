@@ -33,7 +33,7 @@ stages:
     outs:
       - data/final/train.csv
       - data/final/test.csv
-      - models/tfidf_vectorizer.pkl
+      - models/transformer.pkl
 
   model_building:
     cmd: python3 src/model_building.py
@@ -45,7 +45,7 @@ stages:
       - model_building.model_parameters
 
     outs:
-      - models/final_model.pkl
+      - models/model.pkl
 
   model_evaluation:
     cmd: python3 src/model_evaluation.py

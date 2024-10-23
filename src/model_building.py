@@ -92,7 +92,7 @@ def main()->None:
     model = train_model(X_train, y_train, **params["model_parameters"])
 
     # Save the trained model to a specified path
-    model_save(model, os.path.join("models", "final_model.pkl"))
+    model_save(model, os.path.join("models", "model.pkl"))
 
 # Entry point of the script
 if __name__ == "__main__":

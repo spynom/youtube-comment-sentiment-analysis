@@ -100,7 +100,7 @@ def main():
         logger.info("Test data saved successfully")
 
         # Save the vectorizer model to a file
-        with open(os.path.join("models", "tfidf_vectorizer.pkl"), "wb") as f:
+        with open(os.path.join("models", "transformer.pkl"), "wb") as f:
             pickle.dump(tfidf_vectorizer, f)
         logger.info("Transformer model saved successfully")
 

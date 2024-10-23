@@ -1,4 +1,4 @@
-import dotenv
+import json
 import pandas as pd
 from lightgbm import LGBMClassifier
 import os
@@ -75,11 +75,12 @@ def evaluate_model(model, X, y,dataset_name):
         report = classification_report(y, y_pred, output_dict=True)
         cm = confusion_matrix(y, y_pred)
 
+
         for label, metrics in report.items():  # Skip overall metrics
-            try:
+            if hasattr(metrics, 'items'):
                 for metric, value in metrics.items():
                     mlflow.log_metric(f"{dataset_name}_{label}_{metric}", value)
-            except AttributeError:
+            else:
                 mlflow.log_metric(f"{dataset_name}_{label}", metrics)
 
 
@@ -107,6 +108,13 @@ def log_confusion_matrix(cm, dataset_name):
     mlflow.log_artifact(cm_file_path)
     plt.close()
 
+def save_run_info(run_id,artifact_path):
+    with open("mlflow_experiment_info.json","w") as f:
+        json.dump(
+            {"run_id": run_id,
+             "artifact_path": artifact_path}
+        ,f)
+
 def main():
     mlflow.set_tracking_uri(os.getenv('MLFLOW_TRACKING_URI'))
     mlflow.set_experiment(os.getenv('MLFLOW_EXPERIMENT_NAME'))
@@ -124,11 +132,22 @@ def main():
         model = load_model(os.path.join('models','final_model.pkl'))
 
         # Log model and vectorizer
-        mlflow.sklearn.log_model(model, "lgbm_model")
-        mlflow.log_artifact(os.path.join("models", 'tfidf_vectorizer.pkl'))
+        mlflow.sklearn.log_model(model, "model")
+        mlflow.log_artifact(os.path.join("models", 'transformer.pkl'))
 
         evaluate_model(model, train_dataset.iloc[:,:-1], train_dataset.iloc[:,-1], 'train')
         evaluate_model(model, test_dataset.iloc[:,:-1], test_dataset.iloc[:,-1], 'test')
+        # Add important tags
+        mlflow.set_tag("model_type", "LightGBM")
+        mlflow.set_tag("transformer_type", "tfidf_vectorizer")
+        mlflow.set_tag("task", "Sentiment Analysis")
+        mlflow.set_tag("dataset", "YouTube Comments")
+
+        run_id = run.info.run_id
+        artifact_uri = mlflow.get_artifact_uri()
+        save_run_info(run_id,artifact_uri)
+
+
 
 if __name__ == '__main__':
     main()
