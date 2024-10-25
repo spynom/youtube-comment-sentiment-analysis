@@ -9,14 +9,22 @@ import os
 # Load environment variables from .env file
 load_dotenv()
 
+# Set up DagsHub credentials for MLflow tracking
+dagshub_token = os.getenv("DAGSHUB_TOKEN")
+if not dagshub_token:
+    raise EnvironmentError("DAGSHUB_TOKEN environment variable is not set")
+
+os.environ["MLFLOW_TRACKING_USERNAME"] = dagshub_token
+os.environ["MLFLOW_TRACKING_PASSWORD"] = dagshub_token
+
 # Set the tracking URI to your MLflow server
-mlflow.set_tracking_uri(os.getenv('MLFLOW_TRACKING_URI'))
+mlflow.set_tracking_uri("https://dagshub.com/spynom/youtube-comment-sentiment-analysis.mlflow")
 
 # Initialize the MLflow client
 client = MlflowClient()
 
 # Specify the model name and the tag you want to search for
-model_name = "youtube_comment_sentimental_analysis_model"  #  model name
+model_name = "youtube_sentimental_analysis_model"  #  model name
 specific_tag_key = "approved"  #  tag key
 specific_tag_value = "True"  #  tag value
 
@@ -58,7 +66,7 @@ def download_artifacts(run_id):
 def get_pridiction(comments:list[str]):
     comments = np.array(comments)
     # Load the pickle file
-    with open("artifacts/tfidf_vectorizer.pkl", 'rb') as file:
+    with open("artifacts/transformer.pkl", 'rb') as file:
         transformer = pickle.load(file)
 
     print(transformer.transform(comments))
@@ -66,8 +74,11 @@ def get_pridiction(comments:list[str]):
 def main():
     run_id = get_run_id()
     if run_id is None:
+        print("No run_id")
         pass
     else:
         download_artifacts(run_id)
 
     get_pridiction(["my name is saurav","what is ur name"])
+
+main()

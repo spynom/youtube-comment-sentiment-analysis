@@ -3,10 +3,10 @@ import dagshub
 import mlflow
 import json
 import logging
-#from dotenv import load_dotenv
+from dotenv import load_dotenv
 
 # Load environment variables from .env file
-#load_dotenv()
+load_dotenv()
 
 
 # Set up DagsHub credentials for MLflow tracking
