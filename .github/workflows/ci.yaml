@@ -30,4 +30,5 @@ jobs:
         env:
           DAGSHUB_TOKEN: ${{ secrets.DAGSHUB_TOKEN }}
         run: |
-          python3.10 -m unittest discover -s test 
+          python3.10 -m unittest discover -s test -p "model_test.py"
+
