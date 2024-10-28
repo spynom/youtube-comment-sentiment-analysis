@@ -1,21 +1,11 @@
 import pandas as pd
 import os
 import yaml
-import logging
 import requests
+from setup_logger import logger
 
 # Set up logging for the data ingestion process
-logger = logging.getLogger("DataIngestion")
-logger.setLevel(logging.DEBUG)
-
-# Create a stream handler to output logs to the console
-handler = logging.StreamHandler()
-handler.setLevel(logging.DEBUG)
-
-# Define the logging format
-formatter = logging.Formatter('%(asctime)s - %(name)s - %(levelname)s - %(message)s')
-handler.setFormatter(formatter)
-logger.addHandler(handler)
+logger = logger("DataIngestion")
 
 
 def read_yaml(path: str) -> dict:

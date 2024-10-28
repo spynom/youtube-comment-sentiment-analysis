@@ -6,20 +6,9 @@ import os
 import numpy as np
 import yaml
 from sklearn.model_selection import train_test_split
-import logging
+from setup_logger import logger
 
-# Set up logging for the data ingestion process
-logger = logging.getLogger("DataIngestion")
-logger.setLevel(logging.DEBUG)
-
-# Create a stream handler for logging to console
-handler = logging.StreamHandler()
-handler.setLevel(logging.DEBUG)
-
-# Set up logging format
-formatter = logging.Formatter('%(asctime)s - %(name)s - %(levelname)s - %(message)s')
-handler.setFormatter(formatter)
-logger.addHandler(handler)
+logger = logger("DataPreprocessing")
 
 # Function to preprocess individual comments
 def preprocess_comment(comment):

@@ -1,34 +1,12 @@
 import os
-import dagshub
 import mlflow
 import json
-import logging
-from dotenv import load_dotenv
-
-# Load environment variables from .env file
-load_dotenv()
-
-
-# Set up DagsHub credentials for MLflow tracking
-dagshub_token = os.getenv("DAGSHUB_TOKEN")
-if not dagshub_token:
-    raise EnvironmentError("DAGSHUB_PAT environment variable is not set")
-
-os.environ["MLFLOW_TRACKING_USERNAME"] = dagshub_token
-os.environ["MLFLOW_TRACKING_PASSWORD"] = dagshub_token
-
+from DagshubConnector import connector
+from setup_logger import logger
+# connect to Dagshub server
+connector()
 # Set up logging for the model building process
-logger = logging.getLogger("Model evaluation")
-logger.setLevel(logging.DEBUG)
-
-# Create a console handler to output logs to the console
-handler = logging.StreamHandler()
-handler.setLevel(logging.DEBUG)
-
-# Define the log message format
-formatter = logging.Formatter('%(asctime)s - %(name)s - %(levelname)s - %(message)s')
-handler.setFormatter(formatter)
-logger.addHandler(handler)
+logger = logger("Model Registry")
 
 
 def load_run_info(file:str):

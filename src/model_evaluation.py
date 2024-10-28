@@ -5,38 +5,18 @@ import os
 import yaml
 import pickle
 from sklearn.metrics import classification_report,confusion_matrix, accuracy_score
-import logging
+from setup_logger import logger
 import matplotlib.pyplot as plt
 import seaborn as sns
 import mlflow
-from dotenv import load_dotenv
+from DagshubConnector import connector
 from mlflow.models import infer_signature
 
-# Load environment variables from .env file
-load_dotenv()
-
-# Set up DagsHub credentials for MLflow tracking
-dagshub_token = os.getenv("DAGSHUB_TOKEN")
-if not dagshub_token:
-    raise EnvironmentError("DAGSHUB_TOKEN environment variable is not set")
-
-os.environ["MLFLOW_TRACKING_USERNAME"] = dagshub_token
-os.environ["MLFLOW_TRACKING_PASSWORD"] = dagshub_token
-
-
+# connect to Dagshub server
+connector()
 
 # Set up logging for the model building process
-logger = logging.getLogger("Model evaluation")
-logger.setLevel(logging.DEBUG)
-
-# Create a console handler to output logs to the console
-handler = logging.StreamHandler()
-handler.setLevel(logging.DEBUG)
-
-# Define the log message format
-formatter = logging.Formatter('%(asctime)s - %(name)s - %(levelname)s - %(message)s')
-handler.setFormatter(formatter)
-logger.addHandler(handler)
+logger = logger("Model Evaluation")
 
 def load_data(path: str)->pd.DataFrame:
     """Load training dataset from a CSV file."""

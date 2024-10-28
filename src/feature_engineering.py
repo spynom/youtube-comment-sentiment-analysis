@@ -1,23 +1,12 @@
 import os
 import pandas as pd
 from sklearn.feature_extraction.text import TfidfVectorizer
-from sklearn.model_selection import train_test_split
-import logging
 import yaml
 import pickle
+from setup_logger import logger
 
-# Set up logging for the feature engineering process
-logger = logging.getLogger("Feature Engineering")
-logger.setLevel(logging.DEBUG)
+logger = logger("FeatureEngineering")
 
-# Create a console handler to output logs to the console
-handler = logging.StreamHandler()
-handler.setLevel(logging.DEBUG)
-
-# Define the log message format
-formatter = logging.Formatter('%(asctime)s - %(name)s - %(levelname)s - %(message)s')
-handler.setFormatter(formatter)
-logger.addHandler(handler)
 
 def read_yaml(path: str) -> dict:
     """Read parameters from a YAML file."""
