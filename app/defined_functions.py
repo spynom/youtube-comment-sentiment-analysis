@@ -5,14 +5,28 @@ import mlflow
 import pickle
 from dotenv import load_dotenv
 import os
+import logging
 
 # Load environment variables from .env file
 load_dotenv()
 
+# Set up logging for the model building process
+logger = logging.getLogger("server")
+logger.setLevel(logging.DEBUG)
+
+# Create a console handler to output logs to the console
+handler = logging.FileHandler('server.log')
+handler.setLevel(logging.DEBUG)
+
+# Define the log message format
+formatter = logging.Formatter('%(asctime)s - %(name)s - %(levelname)s - %(message)s')
+handler.setFormatter(formatter)
+logger.addHandler(handler)
+
 # Set up DagsHub credentials for MLflow tracking
 dagshub_token = os.getenv("DAGSHUB_TOKEN")
 if not dagshub_token:
-    raise EnvironmentError("DAGSHUB_TOKEN environment variable is not set")
+    logger.error("DAGSHUB_TOKEN environment variable is not set")
 
 os.environ["MLFLOW_TRACKING_USERNAME"] = dagshub_token
 os.environ["MLFLOW_TRACKING_PASSWORD"] = dagshub_token
@@ -35,50 +49,46 @@ class comment(BaseModel):
 def get_run_id():
     # Fetch the specified model
     try:
-        model = client.get_registered_model(model_name)
-        for version in model.latest_versions:
-            # Directly check the tags of the model version
-            if version.tags.get(specific_tag_key) == specific_tag_value:
-                run_id = version.run_id
-                return run_id
+        # Load the new model from MLflow model registry
+        model_name = "youtube_sentimental_analysis_model"
 
-            else:
-                return None
+        client = mlflow.tracking.MlflowClient()
 
-    except:
+        registered_model = client.get_registered_model(model_name)
+
+        production_model_version = registered_model.aliases["production"]
+
+        # Get the production stage model details
+        production_model_run_id = client.get_model_version(name=model_name, version=production_model_version).run_id
+        logger.info("fetched run_id %s", production_model_run_id)
+
+        return production_model_run_id
+
+    except Exception as e:
+        logger.error("Error occurred while fetching run_id %s",e)
         return None
 
 def download_artifacts(run_id):
     try:
         # Load model as a PyFuncModel.
-        model = mlflow.pyfunc.load_model(f"runs:/{run_id}/lgbm_model")
-        model_artifact = "lgbm_model/model.pkl"
+       # model = mlflow.pyfunc.load_model(f"runs:/{run_id}/LGBMClassifier_model")
+        model_artifact = "LGBMClassifier_model/model.pkl"
 
-        transformer = "tfidf_vectorizer.pkl"
+        transformer = "transformer.pkl"
+        artifacts = client.list_artifacts(run_id)
 
         client.download_artifacts(run_id, model_artifact, dst_path="artifacts")
         client.download_artifacts(run_id, transformer, dst_path="artifacts")
-        return True
+        logger.info("Downloaded artifacts successfully")
 
-    except:
-        return False
+    except Exception as e:
+        logger.error("Error occurred while downloading artifacts %s",e)
 
-def get_pridiction(comments:list[str]):
-    comments = np.array(comments)
-    # Load the pickle file
-    with open("artifacts/transformer.pkl", 'rb') as file:
-        transformer = pickle.load(file)
 
-    print(transformer.transform(comments))
-
-def main():
+def update_model():
     run_id = get_run_id()
     if run_id is None:
         print("No run_id")
         pass
     else:
         download_artifacts(run_id)
-
-    get_pridiction(["my name is saurav","what is ur name"])
-
-main()
