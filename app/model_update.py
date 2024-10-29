@@ -1,35 +1,14 @@
-import numpy as np
-from pydantic import BaseModel
+
 from mlflow.tracking import MlflowClient
 import mlflow
-import pickle
-from dotenv import load_dotenv
-import os
-import logging
+from connect_dagshub import ConnectDagsHub
+from get_logger import Logger
 
-# Load environment variables from .env file
-load_dotenv()
+#setup logger
+logger = Logger.get_logger("model_update")
 
-# Set up logging for the model building process
-logger = logging.getLogger("server")
-logger.setLevel(logging.DEBUG)
-
-# Create a console handler to output logs to the console
-handler = logging.FileHandler('server.log')
-handler.setLevel(logging.DEBUG)
-
-# Define the log message format
-formatter = logging.Formatter('%(asctime)s - %(name)s - %(levelname)s - %(message)s')
-handler.setFormatter(formatter)
-logger.addHandler(handler)
-
-# Set up DagsHub credentials for MLflow tracking
-dagshub_token = os.getenv("DAGSHUB_TOKEN")
-if not dagshub_token:
-    logger.error("DAGSHUB_TOKEN environment variable is not set")
-
-os.environ["MLFLOW_TRACKING_USERNAME"] = dagshub_token
-os.environ["MLFLOW_TRACKING_PASSWORD"] = dagshub_token
+#connect to DagsHub
+ConnectDagsHub.connect()
 
 # Set the tracking URI to your MLflow server
 mlflow.set_tracking_uri("https://dagshub.com/spynom/youtube-comment-sentiment-analysis.mlflow")
@@ -37,14 +16,9 @@ mlflow.set_tracking_uri("https://dagshub.com/spynom/youtube-comment-sentiment-an
 # Initialize the MLflow client
 client = MlflowClient()
 
-# Specify the model name and the tag you want to search for
-model_name = "youtube_sentimental_analysis_model"  #  model name
-specific_tag_key = "approved"  #  tag key
-specific_tag_value = "True"  #  tag value
 
 
-class comment(BaseModel):
-    comments: list[str]
+
 
 def get_run_id():
     # Fetch the specified model
