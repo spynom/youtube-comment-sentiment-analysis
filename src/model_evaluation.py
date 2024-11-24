@@ -9,11 +9,10 @@ from setup_logger import logger
 import matplotlib.pyplot as plt
 import seaborn as sns
 import mlflow
-from DagshubConnector import connector
 from mlflow.models import infer_signature
-
-# connect to Dagshub server
-connector()
+from dotenv import load_dotenv
+# Load environment variables from .env file
+load_dotenv()
 
 # Set up logging for the model building process
 logger = logger("Model Evaluation")

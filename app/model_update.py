@@ -1,14 +1,14 @@
 
 from mlflow.tracking import MlflowClient
 import mlflow
-from connect_dagshub import ConnectDagsHub
+from dotenv import load_dotenv
 from get_logger import Logger
-
+# Load environment variables from .env file
+load_dotenv()
+import os
+from pathlib import Path
 #setup logger
 logger = Logger.get_logger("model_update")
-
-#connect to DagsHub
-ConnectDagsHub.connect()
 
 # Set the tracking URI to your MLflow server
 mlflow.set_tracking_uri("https://dagshub.com/spynom/youtube-comment-sentiment-analysis.mlflow")
@@ -44,16 +44,21 @@ def get_run_id():
 
 def download_artifacts(run_id):
     try:
+
         # Load model as a PyFuncModel.
        # model = mlflow.pyfunc.load_model(f"runs:/{run_id}/LGBMClassifier_model")
         model_artifact = "LGBMClassifier_model/model.pkl"
 
         transformer = "transformer.pkl"
-        artifacts = client.list_artifacts(run_id)
+        if not os.path.exists(path=Path(f"artifacts/{model_artifact}")) and not os.path.exists(Path(f"artifacts/{transformer}")):
+            artifacts = client.list_artifacts(run_id)
 
-        client.download_artifacts(run_id, model_artifact, dst_path="artifacts")
-        client.download_artifacts(run_id, transformer, dst_path="artifacts")
-        logger.info("Downloaded artifacts successfully")
+            client.download_artifacts(run_id, model_artifact, dst_path="artifacts")
+            client.download_artifacts(run_id, transformer, dst_path="artifacts")
+            logger.info("Downloaded artifacts successfully")
+
+        else:
+            logger.info("Artifacts already exist")
 
     except Exception as e:
         logger.error("Error occurred while downloading artifacts %s",e)
@@ -62,7 +67,6 @@ def download_artifacts(run_id):
 def update_model():
     run_id = get_run_id()
     if run_id is None:
-        print("No run_id")
         pass
     else:
         download_artifacts(run_id)

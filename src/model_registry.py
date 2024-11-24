@@ -1,10 +1,10 @@
 import os
 import mlflow
 import json
-from DagshubConnector import connector
 from setup_logger import logger
-# connect to Dagshub server
-connector()
+from dotenv import load_dotenv
+# Load environment variables from .env file
+load_dotenv()
 # Set up logging for the model building process
 logger = logger("Model Registry")
 

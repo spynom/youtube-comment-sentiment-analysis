@@ -1,14 +1,13 @@
 import mlflow
 import json
-from src.DagshubConnector import connector
+from dotenv import load_dotenv
+load_dotenv()
 import unittest
 
 
 class TestModelLoading(unittest.TestCase):
 
     def setUp(self):
-        # connect to Dagshub server
-        connector()
 
         # Set up MLflow tracking URI
         mlflow.set_tracking_uri("https://dagshub.com/spynom/youtube-comment-sentiment-analysis.mlflow")
