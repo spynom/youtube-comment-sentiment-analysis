@@ -68,7 +68,7 @@ stages:
       size: 120358650
     - path: models/transformer.pkl
       hash: md5
-      md5: 75e7ca65cc88ddaa2fc9bb5db7bcf435
+      md5: 06da4e32d751efdff7b2af6e5f741bf4
       size: 36892
   data_preprocessing:
     cmd: python3 src/data_preprocessing.py
@@ -147,7 +147,7 @@ stages:
       size: 2920958
     - path: models/transformer.pkl
       hash: md5
-      md5: 75e7ca65cc88ddaa2fc9bb5db7bcf435
+      md5: 06da4e32d751efdff7b2af6e5f741bf4
       size: 36892
     - path: src/model_evaluation.py
       hash: md5
@@ -158,5 +158,5 @@ stages:
     deps:
     - path: mlflow_experiment_info.json
       hash: md5
-      md5: b6f5d6f25a8bf253ae6b5e6e0ce8ae9d
+      md5: aa349d0acb17eb078c62b7e560749dc5
       size: 160
