@@ -12,9 +12,8 @@ from fastapi.responses import StreamingResponse
 import pandas as pd
 from typing import List
 from datetime import datetime
-#update_model()
-from wordcloud import WordCloud
-from nltk.corpus import stopwords
+update_model()
+
 from fastapi import FastAPI, HTTPException
 import io
 with open("artifacts/transformer.pkl", 'rb') as file:

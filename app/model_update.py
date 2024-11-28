@@ -70,3 +70,6 @@ def update_model():
         pass
     else:
         download_artifacts(run_id)
+
+if __name__ == "__main__":
+    update_model()
