@@ -5,7 +5,7 @@ build-backend = "flit_core.buildapi"
 [project]
 name = "youtube_comment_sentiment_analysis"
 version = "0.0.1"
-description = "this is a end-to-end project on building sentimental prediction model and deploy it to on server to make it available end users."
+description = "this is a end-to-end project on building sentimental prediction model and deploy it on server to make it available to end users."
 authors = [
   { name = "saurav kumar" },
 ]
